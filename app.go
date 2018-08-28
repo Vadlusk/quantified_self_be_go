@@ -20,3 +20,13 @@ func main() {
   router.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", DeleteMealFood).Methods("DELETE")
   log.Fatal(http.ListenAndServe(":3000", router))
 }
+
+func CreateFood(w http.ResponseWriter, r *http.Request) {}
+func GetFoods(w http.ResponseWriter, r *http.Request) {}
+func GetFood(w http.ResponseWriter, r *http.Request) {}
+func UpdateFood(w http.ResponseWriter, r *http.Request) {}
+func DeleteFood(w http.ResponseWriter, r *http.Request) {}
+func GetMeals(w http.ResponseWriter, r *http.Request) {}
+func GetMeal(w http.ResponseWriter, r *http.Request) {}
+func CreateMealFood(w http.ResponseWriter, r *http.Request) {}
+func DeleteMealFood(w http.ResponseWriter, r *http.Request) {}
