@@ -13,6 +13,21 @@ import (
   _ "github.com/lib/pq"
 )
 
+type Food struct {
+  Id       int    `json:id`
+  Name     string `json:name`
+  Calories int    `json:calories`
+}
+
+var foods []Food
+
+type Meal struct {
+  Id       int    `json:id`
+  Name     string `json:name`
+}
+
+var meals []Meal
+
 const (
   host   = "localhost"
   dbport = 5432
@@ -58,6 +73,7 @@ func main() {
   log.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
+func CreateFoodsTable
 func CreateFood(w http.ResponseWriter, r *http.Request) {}
 func GetFoods(w http.ResponseWriter, r *http.Request) {}
 func GetFood(w http.ResponseWriter, r *http.Request) {}
