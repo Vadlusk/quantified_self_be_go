@@ -1,13 +1,35 @@
 package main
 
 import (
-  "encoding/json"
+  "database/sql"
+  "fmt"
+  _ "encoding/json"
   "log"
   "net/http"
   "github.com/gorilla/mux"
+  _ "github.com/lib/pq"
+)
+
+const (
+  host   = "localhost"
+  dbport = 5432
+  user   = "vadlusk"
+  dbname = "quantified_self_go_dev"
 )
 
 func main() {
+  psqlInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
+    host, dbport, user, dbname)
+  db, err := sql.Open("postgres", psqlInfo)
+  if err != nil {
+    panic(err)
+  }
+  defer db.Close()
+  err = db.Ping()
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println("Successfully connected!")
   router := mux.NewRouter()
   router.HandleFunc("/api/v1/foods", CreateFood).Methods("POST")
   router.HandleFunc("/api/v1/foods", GetFoods).Methods("GET")
