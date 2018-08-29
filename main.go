@@ -16,7 +16,7 @@ import (
 type Food struct {
   ID       string `json:id`
   Name     string `json:name`
-  Calories int    `json:calories`
+  Calories string `json:calories`
 }
 
 var foods []Food
@@ -36,13 +36,15 @@ const (
 )
 
 func main() {
+  // mock data
   meals = append(meals, Meal{ID: "1", Name: "Breakfast"})
   meals = append(meals, Meal{ID: "2", Name: "Snack"})
   meals = append(meals, Meal{ID: "3", Name: "Lunch"})
   meals = append(meals, Meal{ID: "4", Name: "Dinner"})
-  foods = append(foods, Food{ID: "1", Name: "Banana", Calories: 45})
-  foods = append(foods, Food{ID: "2", Name: "Steak", Calories: 800})
-  foods = append(foods, Food{ID: "3", Name: "Apple", Calories: 50})
+  foods = append(foods, Food{ID: "1", Name: "Banana", Calories: "45"})
+  foods = append(foods, Food{ID: "2", Name: "Steak", Calories: "800"})
+  foods = append(foods, Food{ID: "3", Name: "Apple", Calories: "50"})
+  // connect to database
   psqlInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
     host, dbport, user, dbname)
   db, err := sql.Open("postgres", psqlInfo)
@@ -54,6 +56,8 @@ func main() {
   if err != nil {
     panic(err)
   }
+  fmt.Println("Successfully connected to database!")
+  // create tables and seed meals
   db.Exec(`CREATE TABLE IF NOT EXISTS meals (
     id SERIAL PRIMARY KEY NOT NULL,
     name TEXT NOT NULL
@@ -68,15 +72,15 @@ func main() {
     meal_id INT REFERENCES meals ON DELETE CASCADE,
     food_id INT REFERENCES foods ON DELETE CASCADE
   )`)
-  fmt.Println("Successfully connected to database!")
-  router := mux.NewRouter()
+  fmt.Println("Successfully seeded!")
+  // start server
   c := cors.New(cors.Options{
     AllowedOrigins: []string{"*"},
     AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
     AllowedHeaders: []string{"*"},
     Debug: true,
   })
-  handler := c.Handler(router)
+  router := mux.NewRouter()
   router.HandleFunc("/api/v1/foods", CreateFood).Methods("POST")
   router.HandleFunc("/api/v1/foods", GetFoods).Methods("GET")
   router.HandleFunc("/api/v1/foods/{id}", GetFood).Methods("GET")
@@ -86,6 +90,7 @@ func main() {
   router.HandleFunc("/api/v1/meals/{meal_id}/foods", GetMeal).Methods("GET")
   router.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", CreateMealFood).Methods("POST")
   router.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", DeleteMealFood).Methods("DELETE")
+  handler := c.Handler(router)
   port := os.Getenv("PORT")
   if port == "" {
     port = "3000"
