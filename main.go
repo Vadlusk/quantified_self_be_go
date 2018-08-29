@@ -72,6 +72,9 @@ func main() {
     meal_id INT REFERENCES meals ON DELETE CASCADE,
     food_id INT REFERENCES foods ON DELETE CASCADE
   )`)
+  db.Exec(`INSERT INTO meals (id, name)
+           VALUES (1, 'Breakfast'), (2, 'Snack'), (3, 'Lunch'), (4, 'Dinner')
+  `)
   fmt.Println("Successfully seeded!")
   // start server
   c := cors.New(cors.Options{
