@@ -7,6 +7,8 @@ import (
   _ "encoding/json"
   "log"
   "net/http"
+
+  "github.com/rs/cors"
   "github.com/gorilla/mux"
   _ "github.com/lib/pq"
 )
@@ -32,6 +34,12 @@ func main() {
   }
   fmt.Println("Successfully connected to database!")
   router := mux.NewRouter()
+  c := cors.New(cors.Options{
+    AllowedOrigins: []string{"*"},
+    AllowedMethods: []string{"*"},
+    Debug: true,
+  })
+  handler := c.Handler(router)
   router.HandleFunc("/api/v1/foods", CreateFood).Methods("POST")
   router.HandleFunc("/api/v1/foods", GetFoods).Methods("GET")
   router.HandleFunc("/api/v1/foods/{id}", GetFood).Methods("GET")
@@ -46,7 +54,7 @@ func main() {
     port = "3000"
   }
   fmt.Println("Listening on port "+port)
-  log.Fatal(http.ListenAndServe(":"+port, router))
+  log.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
 func CreateFood(w http.ResponseWriter, r *http.Request) {}
