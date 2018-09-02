@@ -2,31 +2,25 @@ package main
 
 import (
   "database/sql"
-  "fmt"
-  "os"
   "encoding/json"
+  "fmt"
   "log"
   "net/http"
+  "os"
 
   "github.com/rs/cors"
   "github.com/gorilla/mux"
   _ "github.com/lib/pq"
 )
 
+type FoodStruct struct {
+  Food *Food `json:"food"`
+}
+
 type Food struct {
-  ID       string `json:id`
-  Name     string `json:name`
-  Calories string `json:calories`
+  Name     string `json:"name"`
+  Calories string `json:"calories"`
 }
-
-var foods []Food
-
-type Meal struct {
-  ID    string  `json:id`
-  Name  string  `json:name`
-}
-
-var meals []Meal
 
 const (
   host   = "localhost"
@@ -36,14 +30,6 @@ const (
 )
 
 func main() {
-  // mock data
-  meals = append(meals, Meal{ID: "1", Name: "Breakfast"})
-  meals = append(meals, Meal{ID: "2", Name: "Snack"})
-  meals = append(meals, Meal{ID: "3", Name: "Lunch"})
-  meals = append(meals, Meal{ID: "4", Name: "Dinner"})
-  foods = append(foods, Food{ID: "1", Name: "Banana", Calories: "45"})
-  foods = append(foods, Food{ID: "2", Name: "Steak", Calories: "800"})
-  foods = append(foods, Food{ID: "3", Name: "Apple", Calories: "50"})
   // connect to database
   psqlInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
     host, dbport, user, dbname)
@@ -59,18 +45,18 @@ func main() {
   fmt.Println("Successfully connected to database!")
   // create tables and seed meals
   db.Exec(`CREATE TABLE IF NOT EXISTS meals (
-    id SERIAL PRIMARY KEY NOT NULL,
-    name TEXT NOT NULL
+            id SERIAL PRIMARY KEY NOT NULL,
+            name TEXT NOT NULL
   )`)
   db.Exec(`CREATE TABLE IF NOT EXISTS foods (
-    id SERIAL PRIMARY KEY NOT NULL,
-    name TEXT NOT NULL,
-    calories INT NOT NULL
+            id SERIAL PRIMARY KEY NOT NULL,
+            name TEXT NOT NULL,
+            calories INT NOT NULL
   )`)
   db.Exec(`CREATE TABLE IF NOT EXISTS meal_foods (
-    id SERIAL PRIMARY KEY NOT NULL,
-    meal_id INT REFERENCES meals ON DELETE CASCADE,
-    food_id INT REFERENCES foods ON DELETE CASCADE
+            id SERIAL PRIMARY KEY NOT NULL,
+            meal_id INT REFERENCES meals ON DELETE CASCADE,
+            food_id INT REFERENCES foods ON DELETE CASCADE
   )`)
   db.Exec(`INSERT INTO meals (id, name)
            VALUES (1, 'Breakfast'), (2, 'Snack'), (3, 'Lunch'), (4, 'Dinner')
@@ -84,12 +70,12 @@ func main() {
     Debug: true,
   })
   router := mux.NewRouter()
-  router.HandleFunc("/api/v1/foods", CreateFood).Methods("POST")
-  router.HandleFunc("/api/v1/foods", GetFoods).Methods("GET")
+  router.HandleFunc("/api/v1/foods/", CreateFood).Methods("POST")
+  router.HandleFunc("/api/v1/foods/", GetFoods).Methods("GET")
   router.HandleFunc("/api/v1/foods/{id}", GetFood).Methods("GET")
   router.HandleFunc("/api/v1/foods/{id}", UpdateFood).Methods("PUT")
   router.HandleFunc("/api/v1/foods/{id}", DeleteFood).Methods("DELETE")
-  router.HandleFunc("/api/v1/meals", GetMeals).Methods("GET")
+  router.HandleFunc("/api/v1/meals/", GetMeals).Methods("GET")
   router.HandleFunc("/api/v1/meals/{meal_id}/foods", GetMeal).Methods("GET")
   router.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", CreateMealFood).Methods("POST")
   router.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", DeleteMealFood).Methods("DELETE")
@@ -102,27 +88,52 @@ func main() {
   log.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
-func CreateFood(w http.ResponseWriter, r *http.Request) {}
+func CreateFood(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Content-Type", "application/json")
+  var f FoodStruct
+  err := json.NewDecoder(r.Body).Decode(&f)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println(f.Food)
+}
 
 func GetFoods(w http.ResponseWriter, r *http.Request) {
-  json.NewEncoder(w).Encode(foods)
+  w.Header().Set("Content-Type", "application/json")
 }
 
 func GetFood(w http.ResponseWriter, r *http.Request) {
-  params := mux.Vars(r)
-  for _, food := range foods {
-    if food.ID == params["id"] {
-      json.NewEncoder(w).Encode(food)
-      return
-    }
-  }
+  w.Header().Set("Content-Type", "application/json")
+
+  // params := mux.Vars(r)
+  // for _, food := range foods {
+  //   if food.ID == params["id"] {
+  //     json.NewEncoder(w).Encode(food)
+  //     return
+  //   }
+  // }
 }
 
-func UpdateFood(w http.ResponseWriter, r *http.Request) {}
-func DeleteFood(w http.ResponseWriter, r *http.Request) {}
-func GetMeals(w http.ResponseWriter, r *http.Request) {
-  json.NewEncoder(w).Encode(meals)
+func UpdateFood(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Content-Type", "application/json")
 }
-func GetMeal(w http.ResponseWriter, r *http.Request) {}
-func CreateMealFood(w http.ResponseWriter, r *http.Request) {}
-func DeleteMealFood(w http.ResponseWriter, r *http.Request) {}
+
+func DeleteFood(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Content-Type", "application/json")
+
+}
+func GetMeals(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Content-Type", "application/json")
+}
+
+func GetMeal(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Content-Type", "application/json")
+}
+
+func CreateMealFood(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Content-Type", "application/json")
+}
+
+func DeleteMealFood(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Content-Type", "application/json")
+}
