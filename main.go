@@ -31,18 +31,8 @@ const (
 
 func main() {
   // connect to database
-  psqlInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
-    host, dbport, user, dbname)
-  db, err := sql.Open("postgres", psqlInfo)
-  if err != nil {
-    panic(err)
-  }
+  db := initializeDB(host, dbport, user, dbname)
   defer db.Close()
-  err = db.Ping()
-  if err != nil {
-    panic(err)
-  }
-  fmt.Println("Successfully connected to database!")
   // create tables and seed meals
   db.Exec(`CREATE TABLE IF NOT EXISTS meals (
             id SERIAL PRIMARY KEY NOT NULL,
@@ -88,6 +78,21 @@ func main() {
   log.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
+func initializeDB(host string, dbport int, user string, dbname string) sql.DB {
+  psqlInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
+    host, dbport, user, dbname)
+  db, err := sql.Open("postgres", psqlInfo)
+  if err != nil {
+    panic(err)
+  }
+  err = db.Ping()
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println("Successfully connected to database!")
+  return *db
+}
+
 func CreateFood(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   var f FoodStruct
@@ -95,7 +100,10 @@ func CreateFood(w http.ResponseWriter, r *http.Request) {
   if err != nil {
     panic(err)
   }
-  fmt.Println(f.Food)
+  // db.Exec(`INSERT INTO foods (name, calories)
+  //          VALUES (?, ?)
+  //          RETURNING `,
+  //         [f.Food.Name, f.Food.Calories])
 }
 
 func GetFoods(w http.ResponseWriter, r *http.Request) {
