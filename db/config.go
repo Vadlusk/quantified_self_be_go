@@ -20,22 +20,9 @@ func InitDB(dbport int, host, user, dbname string) sql.DB {
     panic(err)
   }
   fmt.Println("Successfully connected to database!")
-  // create tables and seed meals
   createMeals(db)
-  // db.Exec(`CREATE TABLE IF NOT EXISTS meals (
-  //           id SERIAL PRIMARY KEY NOT NULL,
-  //           name TEXT NOT NULL
-  // )`)
-  db.Exec(`CREATE TABLE IF NOT EXISTS foods (
-            id SERIAL PRIMARY KEY NOT NULL,
-            name TEXT NOT NULL,
-            calories INT NOT NULL
-  )`)
-  db.Exec(`CREATE TABLE IF NOT EXISTS meal_foods (
-            id SERIAL PRIMARY KEY NOT NULL,
-            meal_id INT REFERENCES meals ON DELETE CASCADE,
-            food_id INT REFERENCES foods ON DELETE CASCADE
-  )`)
+  createFoods(db)
+  createMealFoods(db)
   db.Exec(`INSERT INTO meals (id, name)
            VALUES (1, 'Breakfast'), (2, 'Snack'), (3, 'Lunch'), (4, 'Dinner')
   `)
@@ -47,5 +34,21 @@ func createMeals(db *sql.DB) {
   db.Exec(`CREATE TABLE IF NOT EXISTS meals (
             id SERIAL PRIMARY KEY NOT NULL,
             name TEXT NOT NULL
+  )`)
+}
+
+func createFoods(db *sql.DB) {
+  db.Exec(`CREATE TABLE IF NOT EXISTS foods (
+            id SERIAL PRIMARY KEY NOT NULL,
+            name TEXT NOT NULL,
+            calories INT NOT NULL
+  )`)
+}
+
+func createMealFoods(db *sql.DB) {
+  db.Exec(`CREATE TABLE IF NOT EXISTS meal_foods (
+            id SERIAL PRIMARY KEY NOT NULL,
+            meal_id INT REFERENCES meals ON DELETE CASCADE,
+            food_id INT REFERENCES foods ON DELETE CASCADE
   )`)
 }
