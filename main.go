@@ -23,14 +23,14 @@ type Food struct {
 }
 
 const (
-  host   = "localhost"
   dbport = 5432
+  host   = "localhost"
   user   = "vadlusk"
   dbname = "quantified_self_go_dev"
 )
 
 func main() {
-  db := database.InitializeDB(host, dbport, user, dbname)
+  db := database.InitializeDB(dbport, host, user, dbname)
   defer db.Close()
   // create tables and seed meals
   db.Exec(`CREATE TABLE IF NOT EXISTS meals (
