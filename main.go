@@ -1,15 +1,14 @@
 package main
 
 import (
-  "database/sql"
   "encoding/json"
   "fmt"
   "log"
   "net/http"
   "os"
 
+  "github.com/vadlusk/quantified_self_be_go/db"
   "github.com/rs/cors"
-  "github.com/gorilla/mux"
   _ "github.com/lib/pq"
 )
 
@@ -23,26 +22,15 @@ type Food struct {
 }
 
 const (
-  host   = "localhost"
   dbport = 5432
+  host   = "localhost"
   user   = "vadlusk"
   dbname = "quantified_self_go_dev"
 )
 
 func main() {
-  // connect to database
-  psqlInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
-    host, dbport, user, dbname)
-  db, err := sql.Open("postgres", psqlInfo)
-  if err != nil {
-    panic(err)
-  }
+  db := db.InitDB(dbport, host, user, dbname)
   defer db.Close()
-  err = db.Ping()
-  if err != nil {
-    panic(err)
-  }
-  fmt.Println("Successfully connected to database!")
   // create tables and seed meals
   db.Exec(`CREATE TABLE IF NOT EXISTS meals (
             id SERIAL PRIMARY KEY NOT NULL,
@@ -69,18 +57,9 @@ func main() {
     AllowedHeaders: []string{"*"},
     Debug: true,
   })
-  router := mux.NewRouter()
-  router.HandleFunc("/api/v1/foods/", CreateFood).Methods("POST")
-  router.HandleFunc("/api/v1/foods/", GetFoods).Methods("GET")
-  router.HandleFunc("/api/v1/foods/{id}", GetFood).Methods("GET")
-  router.HandleFunc("/api/v1/foods/{id}", UpdateFood).Methods("PUT")
-  router.HandleFunc("/api/v1/foods/{id}", DeleteFood).Methods("DELETE")
-  router.HandleFunc("/api/v1/meals/", GetMeals).Methods("GET")
-  router.HandleFunc("/api/v1/meals/{meal_id}/foods", GetMeal).Methods("GET")
-  router.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", CreateMealFood).Methods("POST")
-  router.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", DeleteMealFood).Methods("DELETE")
+  router  := InitRoutes()
   handler := c.Handler(router)
-  port := os.Getenv("PORT")
+  port    := os.Getenv("PORT")
   if port == "" {
     port = "3000"
   }
@@ -95,7 +74,10 @@ func CreateFood(w http.ResponseWriter, r *http.Request) {
   if err != nil {
     panic(err)
   }
-  fmt.Println(f.Food)
+  // db.Exec(`INSERT INTO foods (name, calories)
+  //          VALUES (?, ?)
+  //          RETURNING `,
+  //         [f.Food.Name, f.Food.Calories])
 }
 
 func GetFoods(w http.ResponseWriter, r *http.Request) {
