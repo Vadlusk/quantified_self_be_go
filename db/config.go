@@ -5,7 +5,7 @@ import (
   "fmt"
 
   m "github.com/vadlusk/quantified_self_be_go/db/migrations"
-  // "github.com/vadlusk/quantified_self_be_go/db/seeds"
+  s "github.com/vadlusk/quantified_self_be_go/db/seeds"
 )
 
 func InitDB(dbport int, host, user, dbname string) sql.DB {
@@ -19,11 +19,7 @@ func InitDB(dbport int, host, user, dbname string) sql.DB {
   if err != nil {
     panic(err)
   }
-  fmt.Println("Successfully connected to database!")
   m.Migrate(db)
-  db.Exec(`INSERT INTO meals (id, name)
-           VALUES (1, 'Breakfast'), (2, 'Snack'), (3, 'Lunch'), (4, 'Dinner')
-  `)
-  fmt.Println("Successfully seeded!")
+  s.Seed(db)
   return *db
 }
