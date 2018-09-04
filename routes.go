@@ -1,6 +1,9 @@
 package main
 
 import (
+  "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/foods"
+  "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals"
+  "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals/foods"
   "github.com/gorilla/mux"
 )
 
