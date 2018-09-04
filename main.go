@@ -1,7 +1,6 @@
 package main
 
 import (
-  "encoding/json"
   "fmt"
   "log"
   "net/http"
@@ -67,18 +66,18 @@ func main() {
   log.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
-func CreateFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-  var f FoodStruct
-  err := json.NewDecoder(r.Body).Decode(&f)
-  if err != nil {
-    panic(err)
-  }
-  // db.Exec(`INSERT INTO foods (name, calories)
-  //          VALUES (?, ?)
-  //          RETURNING `,
-  //         [f.Food.Name, f.Food.Calories])
-}
+// func CreateFood(w http.ResponseWriter, r *http.Request) {
+//   w.Header().Set("Content-Type", "application/json")
+//   var f FoodStruct
+//   err := json.NewDecoder(r.Body).Decode(&f)
+//   if err != nil {
+//     panic(err)
+//   }
+//   // db.Exec(`INSERT INTO foods (name, calories)
+//   //          VALUES (?, ?)
+//   //          RETURNING `,
+//   //         [f.Food.Name, f.Food.Calories])
+// }
 
 func GetFoods(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
@@ -86,14 +85,6 @@ func GetFoods(w http.ResponseWriter, r *http.Request) {
 
 func GetFood(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
-
-  // params := mux.Vars(r)
-  // for _, food := range foods {
-  //   if food.ID == params["id"] {
-  //     json.NewEncoder(w).Encode(food)
-  //     return
-  //   }
-  // }
 }
 
 func UpdateFood(w http.ResponseWriter, r *http.Request) {

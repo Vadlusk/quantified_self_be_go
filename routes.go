@@ -2,8 +2,8 @@ package main
 
 import (
   "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/foods"
-  "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals"
-  "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals/foods"
+  // "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals"
+  // mealFoods "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals/foods"
   "github.com/gorilla/mux"
 )
 
@@ -12,7 +12,7 @@ func InitRoutes() *mux.Router {
   s := r.PathPrefix("/api/v1").Subrouter()
   f := s.PathPrefix("/foods").Subrouter()
   m := s.PathPrefix("/meals").Subrouter()
-  f.HandleFunc("/", CreateFood).Methods("POST")
+  f.HandleFunc("/", foods.Create).Methods("POST")
   f.HandleFunc("/", GetFoods).Methods("GET")
   f.HandleFunc("/{id}", GetFood).Methods("GET")
   f.HandleFunc("/{id}", UpdateFood).Methods("PUT")
