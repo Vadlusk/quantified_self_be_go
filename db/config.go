@@ -1,11 +1,11 @@
-package database
+package db
 
 import (
   "database/sql"
   "fmt"
 )
 
-func InitializeDB(dbport int, host, user, dbname string) sql.DB {
+func InitDB(dbport int, host, user, dbname string) sql.DB {
   psqlInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
     host, dbport, user, dbname)
   db, err := sql.Open("postgres", psqlInfo)

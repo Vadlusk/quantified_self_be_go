@@ -7,7 +7,7 @@ import (
   "net/http"
   "os"
 
-  "github.com/vadlusk/quantified_self_be_go/database"
+  "github.com/vadlusk/quantified_self_be_go/db"
   "github.com/rs/cors"
   "github.com/gorilla/mux"
   _ "github.com/lib/pq"
@@ -30,7 +30,7 @@ const (
 )
 
 func main() {
-  db := database.InitializeDB(dbport, host, user, dbname)
+  db := db.InitDB(dbport, host, user, dbname)
   defer db.Close()
   // create tables and seed meals
   db.Exec(`CREATE TABLE IF NOT EXISTS meals (
