@@ -2,8 +2,8 @@ package main
 
 import (
   "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/foods"
-  // "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals"
-  // mealFoods "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals/foods"
+  "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals"
+  mealFoods "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals/foods"
   "github.com/gorilla/mux"
 )
 
@@ -13,13 +13,13 @@ func InitRoutes() *mux.Router {
   f := s.PathPrefix("/foods").Subrouter()
   m := s.PathPrefix("/meals").Subrouter()
   f.HandleFunc("/", foods.Create).Methods("POST")
-  f.HandleFunc("/", GetFoods).Methods("GET")
-  f.HandleFunc("/{id}", GetFood).Methods("GET")
-  f.HandleFunc("/{id}", UpdateFood).Methods("PUT")
-  f.HandleFunc("/{id}", DeleteFood).Methods("DELETE")
-  m.HandleFunc("/", GetMeals).Methods("GET")
-  m.HandleFunc("/{meal_id}/foods", GetMeal).Methods("GET")
-  m.HandleFunc("/{meal_id}/foods/{id}", CreateMealFood).Methods("POST")
-  m.HandleFunc("/{meal_id}/foods/{id}", DeleteMealFood).Methods("DELETE")
+  f.HandleFunc("/", foods.Index).Methods("GET")
+  f.HandleFunc("/{id}", foods.Show).Methods("GET")
+  f.HandleFunc("/{id}", foods.Update).Methods("PUT")
+  f.HandleFunc("/{id}", foods.Destroy).Methods("DELETE")
+  m.HandleFunc("/", meals.Index).Methods("GET")
+  m.HandleFunc("/{meal_id}/foods", meals.Show).Methods("GET")
+  m.HandleFunc("/{meal_id}/foods/{id}", mealFoods.Create).Methods("POST")
+  m.HandleFunc("/{meal_id}/foods/{id}", mealFoods.Destroy).Methods("DELETE")
   return r
 }

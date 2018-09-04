@@ -79,34 +79,34 @@ func main() {
 //   //         [f.Food.Name, f.Food.Calories])
 // }
 
-func GetFoods(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
+// func GetFoods(w http.ResponseWriter, r *http.Request) {
+//   w.Header().Set("Content-Type", "application/json")
+// }
+//
+// func GetFood(w http.ResponseWriter, r *http.Request) {
+//   w.Header().Set("Content-Type", "application/json")
+// }
+//
+// func UpdateFood(w http.ResponseWriter, r *http.Request) {
+//   w.Header().Set("Content-Type", "application/json")
+// }
+//
+// func DeleteFood(w http.ResponseWriter, r *http.Request) {
+//   w.Header().Set("Content-Type", "application/json")
+//
+// }
+// func GetMeals(w http.ResponseWriter, r *http.Request) {
+//   w.Header().Set("Content-Type", "application/json")
+// }
+//
+// func GetMeal(w http.ResponseWriter, r *http.Request) {
+//   w.Header().Set("Content-Type", "application/json")
+// }
 
-func GetFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func UpdateFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func DeleteFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-
-}
-func GetMeals(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func GetMeal(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func CreateMealFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func DeleteMealFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
+// func CreateMealFood(w http.ResponseWriter, r *http.Request) {
+//   w.Header().Set("Content-Type", "application/json")
+// }
+//
+// func DeleteMealFood(w http.ResponseWriter, r *http.Request) {
+//   w.Header().Set("Content-Type", "application/json")
+// }
