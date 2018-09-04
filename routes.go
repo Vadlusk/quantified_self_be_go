@@ -5,7 +5,7 @@ import (
 )
 
 func InitRoutes() *mux.Router {
-  r := mux.NewRouter()
+  r := mux.NewRouter().StrictSlash(true)
   s := r.PathPrefix("/api/v1").Subrouter()
   f := s.PathPrefix("/foods").Subrouter()
   m := s.PathPrefix("/meals").Subrouter()
