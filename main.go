@@ -1,7 +1,6 @@
 package main
 
 import (
-  "encoding/json"
   "fmt"
   "log"
   "net/http"
@@ -65,57 +64,4 @@ func main() {
   }
   fmt.Println("Listening on port "+port)
   log.Fatal(http.ListenAndServe(":"+port, handler))
-}
-
-func CreateFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-  var f FoodStruct
-  err := json.NewDecoder(r.Body).Decode(&f)
-  if err != nil {
-    panic(err)
-  }
-  // db.Exec(`INSERT INTO foods (name, calories)
-  //          VALUES (?, ?)
-  //          RETURNING `,
-  //         [f.Food.Name, f.Food.Calories])
-}
-
-func GetFoods(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func GetFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-
-  // params := mux.Vars(r)
-  // for _, food := range foods {
-  //   if food.ID == params["id"] {
-  //     json.NewEncoder(w).Encode(food)
-  //     return
-  //   }
-  // }
-}
-
-func UpdateFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func DeleteFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-
-}
-func GetMeals(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func GetMeal(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func CreateMealFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
-}
-
-func DeleteMealFood(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "application/json")
 }

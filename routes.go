@@ -1,19 +1,25 @@
 package main
 
 import (
+  "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/foods"
+  "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals"
+  mealFoods "github.com/vadlusk/quantified_self_be_go/controllers/api/v1/meals/foods"
   "github.com/gorilla/mux"
 )
 
 func InitRoutes() *mux.Router {
-  r := mux.NewRouter()
-  r.HandleFunc("/api/v1/foods/", CreateFood).Methods("POST")
-  r.HandleFunc("/api/v1/foods/", GetFoods).Methods("GET")
-  r.HandleFunc("/api/v1/foods/{id}", GetFood).Methods("GET")
-  r.HandleFunc("/api/v1/foods/{id}", UpdateFood).Methods("PUT")
-  r.HandleFunc("/api/v1/foods/{id}", DeleteFood).Methods("DELETE")
-  r.HandleFunc("/api/v1/meals/", GetMeals).Methods("GET")
-  r.HandleFunc("/api/v1/meals/{meal_id}/foods", GetMeal).Methods("GET")
-  r.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", CreateMealFood).Methods("POST")
-  r.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", DeleteMealFood).Methods("DELETE")
+  r := mux.NewRouter().StrictSlash(true)
+  s := r.PathPrefix("/api/v1").Subrouter()
+  f := s.PathPrefix("/foods").Subrouter()
+  m := s.PathPrefix("/meals").Subrouter()
+  f.HandleFunc("/", foods.Create).Methods("POST")
+  f.HandleFunc("/", foods.Index).Methods("GET")
+  f.HandleFunc("/{id}", foods.Show).Methods("GET")
+  f.HandleFunc("/{id}", foods.Update).Methods("PUT")
+  f.HandleFunc("/{id}", foods.Destroy).Methods("DELETE")
+  m.HandleFunc("/", meals.Index).Methods("GET")
+  m.HandleFunc("/{meal_id}/foods", meals.Show).Methods("GET")
+  m.HandleFunc("/{meal_id}/foods/{id}", mealFoods.Create).Methods("POST")
+  m.HandleFunc("/{meal_id}/foods/{id}", mealFoods.Destroy).Methods("DELETE")
   return r
 }
