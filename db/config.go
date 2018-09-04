@@ -21,10 +21,11 @@ func InitDB(dbport int, host, user, dbname string) sql.DB {
   }
   fmt.Println("Successfully connected to database!")
   // create tables and seed meals
-  db.Exec(`CREATE TABLE IF NOT EXISTS meals (
-            id SERIAL PRIMARY KEY NOT NULL,
-            name TEXT NOT NULL
-  )`)
+  createMeals(db)
+  // db.Exec(`CREATE TABLE IF NOT EXISTS meals (
+  //           id SERIAL PRIMARY KEY NOT NULL,
+  //           name TEXT NOT NULL
+  // )`)
   db.Exec(`CREATE TABLE IF NOT EXISTS foods (
             id SERIAL PRIMARY KEY NOT NULL,
             name TEXT NOT NULL,
@@ -40,4 +41,11 @@ func InitDB(dbport int, host, user, dbname string) sql.DB {
   `)
   fmt.Println("Successfully seeded!")
   return *db
+}
+
+func createMeals(db *sql.DB) {
+  db.Exec(`CREATE TABLE IF NOT EXISTS meals (
+            id SERIAL PRIMARY KEY NOT NULL,
+            name TEXT NOT NULL
+  )`)
 }
