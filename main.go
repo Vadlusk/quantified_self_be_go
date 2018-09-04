@@ -11,15 +11,6 @@ import (
   _ "github.com/lib/pq"
 )
 
-type FoodStruct struct {
-  Food *Food `json:"food"`
-}
-
-type Food struct {
-  Name     string `json:"name"`
-  Calories string `json:"calories"`
-}
-
 const (
   dbport = 5432
   host   = "localhost"
