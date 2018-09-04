@@ -4,7 +4,7 @@ import (
   "database/sql"
   "fmt"
 
-  // "github.com/vadlusk/quantified_self_be_go/db/migrations"
+  m "github.com/vadlusk/quantified_self_be_go/db/migrations"
   // "github.com/vadlusk/quantified_self_be_go/db/seeds"
 )
 
@@ -20,35 +20,10 @@ func InitDB(dbport int, host, user, dbname string) sql.DB {
     panic(err)
   }
   fmt.Println("Successfully connected to database!")
-  createMeals(db)
-  createFoods(db)
-  createMealFoods(db)
+  m.Migrate(db)
   db.Exec(`INSERT INTO meals (id, name)
            VALUES (1, 'Breakfast'), (2, 'Snack'), (3, 'Lunch'), (4, 'Dinner')
   `)
   fmt.Println("Successfully seeded!")
   return *db
-}
-
-func createMeals(db *sql.DB) {
-  db.Exec(`CREATE TABLE IF NOT EXISTS meals (
-            id SERIAL PRIMARY KEY NOT NULL,
-            name TEXT NOT NULL
-  )`)
-}
-
-func createFoods(db *sql.DB) {
-  db.Exec(`CREATE TABLE IF NOT EXISTS foods (
-            id SERIAL PRIMARY KEY NOT NULL,
-            name TEXT NOT NULL,
-            calories INT NOT NULL
-  )`)
-}
-
-func createMealFoods(db *sql.DB) {
-  db.Exec(`CREATE TABLE IF NOT EXISTS meal_foods (
-            id SERIAL PRIMARY KEY NOT NULL,
-            meal_id INT REFERENCES meals ON DELETE CASCADE,
-            food_id INT REFERENCES foods ON DELETE CASCADE
-  )`)
 }
