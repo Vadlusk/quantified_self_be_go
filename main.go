@@ -58,9 +58,9 @@ func main() {
     AllowedHeaders: []string{"*"},
     Debug: true,
   })
-  r := InitRoutes()
-  handler := c.Handler(r)
-  port := os.Getenv("PORT")
+  router  := InitRoutes()
+  handler := c.Handler(router)
+  port    := os.Getenv("PORT")
   if port == "" {
     port = "3000"
   }
