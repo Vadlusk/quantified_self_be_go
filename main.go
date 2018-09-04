@@ -58,17 +58,17 @@ func main() {
     AllowedHeaders: []string{"*"},
     Debug: true,
   })
-  router := mux.NewRouter()
-  router.HandleFunc("/api/v1/foods/", CreateFood).Methods("POST")
-  router.HandleFunc("/api/v1/foods/", GetFoods).Methods("GET")
-  router.HandleFunc("/api/v1/foods/{id}", GetFood).Methods("GET")
-  router.HandleFunc("/api/v1/foods/{id}", UpdateFood).Methods("PUT")
-  router.HandleFunc("/api/v1/foods/{id}", DeleteFood).Methods("DELETE")
-  router.HandleFunc("/api/v1/meals/", GetMeals).Methods("GET")
-  router.HandleFunc("/api/v1/meals/{meal_id}/foods", GetMeal).Methods("GET")
-  router.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", CreateMealFood).Methods("POST")
-  router.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", DeleteMealFood).Methods("DELETE")
-  handler := c.Handler(router)
+  r := mux.NewRouter()
+  r.HandleFunc("/api/v1/foods/", CreateFood).Methods("POST")
+  r.HandleFunc("/api/v1/foods/", GetFoods).Methods("GET")
+  r.HandleFunc("/api/v1/foods/{id}", GetFood).Methods("GET")
+  r.HandleFunc("/api/v1/foods/{id}", UpdateFood).Methods("PUT")
+  r.HandleFunc("/api/v1/foods/{id}", DeleteFood).Methods("DELETE")
+  r.HandleFunc("/api/v1/meals/", GetMeals).Methods("GET")
+  r.HandleFunc("/api/v1/meals/{meal_id}/foods", GetMeal).Methods("GET")
+  r.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", CreateMealFood).Methods("POST")
+  r.HandleFunc("/api/v1/meals/{meal_id}/foods/{id}", DeleteMealFood).Methods("DELETE")
+  handler := c.Handler(r)
   port := os.Getenv("PORT")
   if port == "" {
     port = "3000"
