@@ -8,6 +8,13 @@ type Food struct {
   Calories int    `json:"calories"`
 }
 
+func Create(info Food) Food {
+  var created Food
+  err := db.Instance().QueryRow(`INSERT INTO foods (name, calories) VALUES ($1, $2) RETURNING *`, info.Name, info.Calories).Scan(&created.ID, &created.Name, &created.Calories)
+  if err != nil { panic(err) }
+  return created
+}
+
 func All() []Food {
   var (
     food Food

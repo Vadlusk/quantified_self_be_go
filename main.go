@@ -1,7 +1,6 @@
 package main
 
 import (
-  "database/sql"
   "fmt"
   "log"
   "net/http"
@@ -19,16 +18,11 @@ const (
   dbname = "quantified_self_go_dev"
 )
 
-type Env struct {
-  db *sql.DB
-}
-
 func main() {
   db := db.InitDB(dbport, host, user, dbname)
   defer db.Close()
-  env := &Env{db: &db}
   // start server
-  router := InitRoutes(env)
+  router := InitRoutes()
   c := cors.New(cors.Options{
     AllowedOrigins: []string{"*"},
     AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
