@@ -7,5 +7,6 @@ type Food struct {
 }
 
 func All() []Food {
-  return
+  var f []Food
+  return f
 }

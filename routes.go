@@ -7,16 +7,16 @@ import (
   "github.com/gorilla/mux"
 )
 
-func InitRoutes() *mux.Router {
+func InitRoutes(env *Env) *mux.Router {
   r := mux.NewRouter().StrictSlash(true)
   s := r.PathPrefix("/api/v1").Subrouter()
   f := s.PathPrefix("/foods").Subrouter()
-  m := s.PathPrefix("/meals").Subrouter()
   f.HandleFunc("/", foods.Create).Methods("POST")
   f.HandleFunc("/", foods.Index).Methods("GET")
   f.HandleFunc("/{id}", foods.Show).Methods("GET")
   f.HandleFunc("/{id}", foods.Update).Methods("PUT")
   f.HandleFunc("/{id}", foods.Destroy).Methods("DELETE")
+  m := s.PathPrefix("/meals").Subrouter()
   m.HandleFunc("/", meals.Index).Methods("GET")
   m.HandleFunc("/{meal_id}/foods", meals.Show).Methods("GET")
   m.HandleFunc("/{meal_id}/foods/{id}", mealFoods.Create).Methods("POST")
