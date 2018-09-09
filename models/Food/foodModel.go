@@ -24,3 +24,10 @@ func All() []Food {
   }
   return foods
 }
+
+func Find(id string) Food {
+  var food Food
+  err := db.Instance().QueryRow(`SELECT * FROM foods WHERE id=$1`, id).Scan(&food.ID, &food.Name, &food.Calories)
+  if err != nil { panic(err) }
+  return food
+}

@@ -1,7 +1,6 @@
 package foods
 
 import (
-  "fmt"
   "encoding/json"
   "net/http"
 
@@ -22,16 +21,16 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func Show(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   params := mux.Vars(r)
-  food   := Food.find(params["id"])
+  food   := Food.Find(params["id"])
   json.NewEncoder(w).Encode(food)
 }
 
 func Update(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
-  params := mux.Vars(r)
+  // params := mux.Vars(r)
 }
 
 func Destroy(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
-  params := mux.Vars(r)
+  // params := mux.Vars(r)
 }
