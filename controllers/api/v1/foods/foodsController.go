@@ -1,10 +1,12 @@
 package foods
 
 import (
+  "fmt"
   "encoding/json"
   "net/http"
 
   "github.com/vadlusk/quantified_self_be_go/models/Food"
+  "github.com/gorilla/mux"
 )
 
 func Create(w http.ResponseWriter, r *http.Request)  {
@@ -19,12 +21,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 func Show(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
+  params := mux.Vars(r)
 }
 
 func Update(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
+  params := mux.Vars(r)
 }
 
 func Destroy(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
+  params := mux.Vars(r)
 }
