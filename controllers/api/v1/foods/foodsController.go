@@ -32,5 +32,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 func Destroy(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
-  // params := mux.Vars(r)
+  params := mux.Vars(r)
+  food   := Food.Destroy(params["id"])
+  json.NewEncoder(w).Encode(food)
 }

@@ -9,13 +9,13 @@ type Food struct {
 }
 
 func All() []Food {
-  rows, err := db.Instance().Query(`SELECT * FROM foods`)
-  if err != nil { panic(err) }
-  defer rows.Close()
   var (
     food Food
     foods []Food
   )
+  rows, err := db.Instance().Query(`SELECT * FROM foods`)
+  if err != nil { panic(err) }
+  defer rows.Close()
   for rows.Next() {
     if err := rows.Scan(&food.ID, &food.Name, &food.Calories); err != nil {
       panic(err)
@@ -30,4 +30,10 @@ func Find(id string) Food {
   err := db.Instance().QueryRow(`SELECT * FROM foods WHERE id=$1`, id).Scan(&food.ID, &food.Name, &food.Calories)
   if err != nil { panic(err) }
   return food
+}
+
+func Destroy(id string) bool {
+  err := db.Instance().QueryRow(`DELETE FROM foods WHERE id=$1`, id)
+  if err != nil { panic(err) }
+  return true
 }
