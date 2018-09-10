@@ -31,7 +31,11 @@ func Show(w http.ResponseWriter, r *http.Request) {
 
 func Update(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
-  // params := mux.Vars(r)
+  params := mux.Vars(r)
+  var foodInfo Food.Food
+  _ = json.NewDecoder(r.Body).Decode(&foodInfo)
+  food := Food.Update(params["id"], foodInfo)
+  json.NewEncoder(w).Encode(food)
 }
 
 func Destroy(w http.ResponseWriter, r *http.Request) {

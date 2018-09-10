@@ -39,6 +39,11 @@ func Find(id string) Food {
   return food
 }
 
+func Update(id string, info Food) Food {
+  var food Food
+  return food
+}
+
 func Destroy(id string) bool {
   err := db.Instance().QueryRow(`DELETE FROM foods WHERE id=$1`, id)
   if err != nil { panic(err) }
