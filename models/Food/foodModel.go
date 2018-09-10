@@ -41,6 +41,8 @@ func Find(id string) Food {
 
 func Update(id string, info Food) Food {
   var food Food
+  err := db.Instance().QueryRow(`UPDATE foods SET name=$1, calories=$2 WHERE id=$3 RETURNING *`, info.Name, info.Calories, id).Scan(&food.ID, &food.Name, &food.Calories)
+  if err != nil { panic(err) }
   return food
 }
 
