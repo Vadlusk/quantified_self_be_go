@@ -9,7 +9,7 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
-  meals := Meal.all()
+  meals := Meal.All()
   json.NewEncoder(w).Encode(meals)
 }
 
