@@ -22,15 +22,15 @@ func main() {
   db := db.InitDB(dbport, host, user, dbname)
   defer db.Close()
   // start server
+  router := InitRoutes()
   c := cors.New(cors.Options{
     AllowedOrigins: []string{"*"},
     AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
     AllowedHeaders: []string{"*"},
     Debug: true,
   })
-  router  := InitRoutes()
   handler := c.Handler(router)
-  port    := os.Getenv("PORT")
+  port := os.Getenv("PORT")
   if port == "" {
     port = "3000"
   }
