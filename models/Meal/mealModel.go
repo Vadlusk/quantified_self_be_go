@@ -33,3 +33,8 @@ func All() []Meal {
   }
   return meals
 }
+
+func Find(id string) Meal {
+  var meal Meal
+  return meal
+}
