@@ -5,7 +5,7 @@ import "github.com/vadlusk/quantified_self_be_go/db"
 type Food struct {
   ID       string `json:"id"`
   Name     string `json:"name"`
-  Calories int    `json:"calories"`
+  Calories string `json:"calories"`
 }
 
 func Create(info Food) Food {

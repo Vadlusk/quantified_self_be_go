@@ -3,6 +3,7 @@ package foods
 import (
   "encoding/json"
   "net/http"
+  "fmt"
 
   "github.com/vadlusk/quantified_self_be_go/models/Food"
   "github.com/gorilla/mux"
