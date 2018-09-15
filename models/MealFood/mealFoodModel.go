@@ -10,7 +10,8 @@ import (
 
 func Create(foodId, mealId string) string {
   var id string
-  err := db.Instance().QueryRow(`INSERT INTO meal_foods (food_id, meal_id) VALUES ($1, $2) RETURNING id`, foodId, mealId).Scan(&id)
+  query := "INSERT INTO meal_foods (food_id, meal_id) VALUES ($1, $2) RETURNING id"
+  err := db.Instance().QueryRow(query, foodId, mealId).Scan(&id)
   if err != nil { panic(err) }
   message := fmt.Sprintf("Successfully added %v to %v", foodName(foodId), mealName(mealId))
   return message

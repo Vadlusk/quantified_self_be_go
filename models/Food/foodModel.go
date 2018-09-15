@@ -10,7 +10,8 @@ type Food struct {
 
 func Create(info Food) Food {
   var created Food
-  err := db.Instance().QueryRow(`INSERT INTO foods (name, calories) VALUES ($1, $2) RETURNING *`, info.Name, info.Calories).Scan(&created.ID, &created.Name, &created.Calories)
+  query := "INSERT INTO foods (name, calories) VALUES ($1, $2) RETURNING *"
+  err := db.Instance().QueryRow(query, info.Name, info.Calories).Scan(&created.ID, &created.Name, &created.Calories)
   if err != nil { panic(err) }
   return created
 }
@@ -34,20 +35,23 @@ func All() []Food {
 
 func Find(id string) Food {
   var food Food
-  err := db.Instance().QueryRow(`SELECT * FROM foods WHERE id=$1`, id).Scan(&food.ID, &food.Name, &food.Calories)
+  query :=  "SELECT * FROM foods WHERE id=$1"
+  err := db.Instance().QueryRow(query, id).Scan(&food.ID, &food.Name, &food.Calories)
   if err != nil { panic(err) }
   return food
 }
 
 func Update(id string, info Food) Food {
   var food Food
-  err := db.Instance().QueryRow(`UPDATE foods SET name=$1, calories=$2 WHERE id=$3 RETURNING *`, info.Name, info.Calories, id).Scan(&food.ID, &food.Name, &food.Calories)
+  query := "UPDATE foods SET name=$1, calories=$2 WHERE id=$3 RETURNING *"
+  err := db.Instance().QueryRow(query, info.Name, info.Calories, id).Scan(&food.ID, &food.Name, &food.Calories)
   if err != nil { panic(err) }
   return food
 }
 
-func Destroy(id string) bool {
-  err := db.Instance().QueryRow(`DELETE FROM foods WHERE id=$1`, id)
+func Destroy(foodId string) bool {
+  var id string
+  err := db.Instance().QueryRow(`DELETE FROM foods WHERE id=$1 RETURNING id`, foodId).Scan(&id)
   if err != nil { panic(err) }
   return true
 }
