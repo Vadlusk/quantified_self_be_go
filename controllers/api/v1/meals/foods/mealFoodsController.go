@@ -11,10 +11,13 @@ import (
 func Create(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   params   := mux.Vars(r)
-  mealFood := MealFood.Create(params["id"], params["meal_id"])
-  json.NewEncoder(w).Encode(mealFood)
+  msg := MealFood.Create(params["id"], params["meal_id"])
+  json.NewEncoder(w).Encode(msg)
 }
 
 func Destroy(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
+  params := mux.Vars(r)
+  msg := MealFood.Destroy(params["id"], params["meal_id"])
+  json.NewEncoder(w).Encode(msg)
 }

@@ -51,7 +51,8 @@ func Update(id string, info Food) Food {
 
 func Destroy(foodId string) bool {
   var id string
-  err := db.Instance().QueryRow(`DELETE FROM foods WHERE id=$1 RETURNING id`, foodId).Scan(&id)
+  query := "DELETE FROM foods WHERE id=$1 RETURNING id"
+  err := db.Instance().QueryRow(query, foodId).Scan(&id)
   if err != nil { panic(err) }
   return true
 }
