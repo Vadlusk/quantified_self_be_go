@@ -8,11 +8,15 @@ import (
   "github.com/gorilla/mux"
 )
 
+type FoodInfo struct {
+  Food Food.Food `json:"food"`
+}
+
 func Create(w http.ResponseWriter, r *http.Request)  {
   w.Header().Set("Content-Type", "application/json")
-  var foodInfo Food.Food
+  var foodInfo FoodInfo
   _ = json.NewDecoder(r.Body).Decode(&foodInfo)
-  food := Food.Create(foodInfo)
+  food := Food.Create(foodInfo.Food)
   json.NewEncoder(w).Encode(food)
 }
 

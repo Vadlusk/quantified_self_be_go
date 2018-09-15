@@ -47,7 +47,7 @@ func Update(id string, info Food) Food {
 }
 
 func Destroy(id string) bool {
-  err := db.Instance().QueryRow(`DELETE FROM foods WHERE id=$1`, id)
+  err := db.Instance().QueryRow(`DELETE FROM foods WHERE id=$1 RETURNING *`, id)
   if err != nil { panic(err) }
   return true
 }
