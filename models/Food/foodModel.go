@@ -11,7 +11,8 @@ type Food struct {
 func Create(info Food) Food {
   var created Food
   query := "INSERT INTO foods (name, calories) VALUES ($1, $2) RETURNING *"
-  err := db.Instance().QueryRow(query, info.Name, info.Calories).Scan(&created.ID, &created.Name, &created.Calories)
+  err := db.Instance().QueryRow(query, info.Name, info.Calories).Scan(
+    &created.ID, &created.Name, &created.Calories)
   if err != nil { panic(err) }
   return created
 }
@@ -36,7 +37,8 @@ func All() []Food {
 func Find(id string) Food {
   var food Food
   query :=  "SELECT * FROM foods WHERE id=$1"
-  err := db.Instance().QueryRow(query, id).Scan(&food.ID, &food.Name, &food.Calories)
+  err := db.Instance().QueryRow(query, id).Scan(
+    &food.ID, &food.Name, &food.Calories)
   if err != nil { panic(err) }
   return food
 }
@@ -44,7 +46,8 @@ func Find(id string) Food {
 func Update(id string, info Food) Food {
   var food Food
   query := "UPDATE foods SET name=$1, calories=$2 WHERE id=$3 RETURNING *"
-  err := db.Instance().QueryRow(query, info.Name, info.Calories, id).Scan(&food.ID, &food.Name, &food.Calories)
+  err := db.Instance().QueryRow(query, info.Name, info.Calories, id).Scan(
+    &food.ID, &food.Name, &food.Calories)
   if err != nil { panic(err) }
   return food
 }
