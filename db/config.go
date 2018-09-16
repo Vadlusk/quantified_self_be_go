@@ -20,12 +20,12 @@ const (
 
 func Instance() *sql.DB {
   if !initialized {
-    InitDB(dbport, host, user, dbname)
+    InitDB()
   }
   return dbInstance
 }
 
-func InitDB(dbport int, host, user, dbname string) sql.DB {
+func InitDB() sql.DB {
   psqlInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
     host, dbport, user, dbname)
   db, err := sql.Open("postgres", psqlInfo)
