@@ -36,5 +36,8 @@ func All() []Meal {
 
 func Find(id string) Meal {
   var meal Meal
+  query := "SELECT * FROM meals WHERE id=$1"
+  err := db.Instance().QueryRow(query, id).Scan(&meal.ID, &meal.Name)
+  if err != nil { panic(err) }
   return meal
 }

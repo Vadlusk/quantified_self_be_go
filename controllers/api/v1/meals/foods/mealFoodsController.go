@@ -10,7 +10,7 @@ import (
 
 func Create(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
-  params   := mux.Vars(r)
+  params := mux.Vars(r)
   msg := MealFood.Create(params["id"], params["meal_id"])
   json.NewEncoder(w).Encode(msg)
 }
