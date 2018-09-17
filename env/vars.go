@@ -11,7 +11,7 @@ func Port() string {
 }
 
 func Host() string {
-  host := os.Getenv("HOST")
+  host := os.Getenv("DATABASE_URL")
   if host == "" { host = "localhost" }
   return host
 }
