@@ -11,7 +11,7 @@ func Port() string {
 }
 
 func Host() string {
-  host := os.Getenv("DATABASE_URL")
+  host := os.Getenv("HOST")
   if host == "" { host = "localhost" }
   return host
 }
@@ -32,4 +32,9 @@ func DbName() string {
   dbName := os.Getenv("DB_NAME")
   if dbName == "" { dbName = "quantified_self_go_dev" }
   return dbName
+}
+
+func Password() string {
+  password := os.Getenv("PASSWORD")
+  return password
 }
