@@ -1,8 +1,10 @@
 package Meal
 
 import (
+  "fmt"
   "github.com/vadlusk/quantified_self_be_go/models/Food"
   "github.com/vadlusk/quantified_self_be_go/db"
+  "github.com/lib/pq"
 )
 
 type Meal struct {
@@ -23,10 +25,11 @@ func All() []Meal {
        LEFT JOIN meal_foods ON meals.id = meal_foods.meal_id
        LEFT JOIN foods ON foods.id = meal_foods.food_id
        GROUP BY meals.id`)
+  fmt.Println(rows)
   if err != nil { panic(err) }
   defer rows.Close()
   for rows.Next() {
-    if err := rows.Scan(&meal.ID, &meal.Name, &meal.Foods); err != nil {
+    if err := rows.Scan(&meal.ID, &meal.Name, pq.Array(&meal.Foods)); err != nil {
       panic(err)
     }
     meals = append(meals, meal)
