@@ -22,7 +22,7 @@ func Instance() *sql.DB {
 func InitDB() sql.DB {
   psqlInfo := fmt.Sprintf(
     "host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
-    env.Host(), env.DbPort(), env.User(), env.Password(), env.DbName())
+    env.Host(), env.DbPort(), env.User(), env.DbName(), env.Password())
   db, err := sql.Open("postgres", psqlInfo)
   if err != nil { panic(err) }
   err = db.Ping()
