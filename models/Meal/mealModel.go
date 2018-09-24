@@ -1,6 +1,7 @@
 package Meal
 
 import (
+  "strconv"
   "github.com/vadlusk/quantified_self_be_go/models/Food"
   "github.com/vadlusk/quantified_self_be_go/db"
 )
@@ -40,7 +41,7 @@ func mealFoods(id int) []Food.Food {
   query := `SELECT f.* from foods f
             INNER JOIN meal_foods mf ON f.id = mf.food_id
             WHERE mf.meal_id=$1`
-  rows, err := db.Instance().Query(query)
+  rows, err := db.Instance().Query(query, id)
   if err != nil { panic(err) }
   defer rows.Close()
   for rows.Next() {
@@ -57,5 +58,7 @@ func Find(id string) Meal {
   query := "SELECT * FROM meals WHERE id=$1"
   err := db.Instance().QueryRow(query, id).Scan(&meal.ID, &meal.Name)
   if err != nil { panic(err) }
+  id_int, _ := strconv.Atoi(id)
+  meal.Foods = mealFoods(id_int)
   return meal
 }
