@@ -1,10 +1,9 @@
 package Meal
 
 import (
-  "fmt"
+  "strconv"
   "github.com/vadlusk/quantified_self_be_go/models/Food"
   "github.com/vadlusk/quantified_self_be_go/db"
-  "github.com/lib/pq"
 )
 
 type Meal struct {
@@ -18,23 +17,40 @@ func All() []Meal {
     meal Meal
     meals []Meal
   )
-  rows, err := db.Instance().Query(`SELECT meals.*,
-       COALESCE(json_agg(foods.* ORDER BY foods.id)
-       FILTER (WHERE foods.id IS NOT NULL), '[]') AS foods
-       FROM meals
-       LEFT JOIN meal_foods ON meals.id = meal_foods.meal_id
-       LEFT JOIN foods ON foods.id = meal_foods.food_id
-       GROUP BY meals.id`)
-  fmt.Println(rows)
+  query := `SELECT * FROM meals`
+  rows, err := db.Instance().Query(query)
   if err != nil { panic(err) }
   defer rows.Close()
   for rows.Next() {
-    if err := rows.Scan(&meal.ID, &meal.Name, pq.Array(&meal.Foods)); err != nil {
+    if err := rows.Scan(&meal.ID, &meal.Name); err != nil {
       panic(err)
     }
     meals = append(meals, meal)
   }
+  for i := 0; i <= 3; i++ {
+    meals[i].Foods = mealFoods(i + 1)
+  }
   return meals
+}
+
+func mealFoods(id int) []Food.Food {
+  var (
+    food Food.Food
+    foods []Food.Food
+  )
+  query := `SELECT f.* from foods f
+            INNER JOIN meal_foods mf ON f.id = mf.food_id
+            WHERE mf.meal_id=$1`
+  rows, err := db.Instance().Query(query, id)
+  if err != nil { panic(err) }
+  defer rows.Close()
+  for rows.Next() {
+    if err := rows.Scan(&food.ID, &food.Name, &food.Calories); err != nil {
+      panic(err)
+    }
+    foods = append(foods, food)
+  }
+  return foods
 }
 
 func Find(id string) Meal {
@@ -42,5 +58,7 @@ func Find(id string) Meal {
   query := "SELECT * FROM meals WHERE id=$1"
   err := db.Instance().QueryRow(query, id).Scan(&meal.ID, &meal.Name)
   if err != nil { panic(err) }
+  id_int, _ := strconv.Atoi(id)
+  meal.Foods = mealFoods(id_int)
   return meal
 }
